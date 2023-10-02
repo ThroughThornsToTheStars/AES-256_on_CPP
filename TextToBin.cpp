@@ -3,7 +3,7 @@
 #include <fstream>
 #include <iterator>
 using namespace std;
- 
+
 string f(int d_code)
 {
     string b_code;
@@ -43,22 +43,27 @@ string f(int d_code)
 }
  
  
-int main ()
+int main()
 {
-    ifstream fin("tests.cpp", ios::binary);
+    setlocale(LC_ALL, "Russian");
+    string filePath;
+    cout << "¬ведите путь к файлу: ";
+    cin >> filePath;
+
+    ifstream fin(filePath, ios::binary);
     if (!fin)
-        cout << "Error!" << endl;
-    else
     {
-        string str((istreambuf_iterator<char>(fin)), istreambuf_iterator<char>());
-        cout << str << endl << endl;
- 
-        for (int i = 0; i < str.size(); ++i)
-        {
-            cout << f((int)str[i]) << ' ';
-        }
-        cout << endl;
+        cout << "ќшибка при открытии файла!" << endl;
+        return 1;
     }
-    
+
+    ofstream MyFile("input.bin", ios::binary);
+    string str((istreambuf_iterator<char>(fin)), istreambuf_iterator<char>());
+
+    for (int i = 0; i < str.size(); ++i)
+    {
+        string binary_code = f((int)str[i]);
+        MyFile.write(binary_code.c_str(), binary_code.size());
+    }
     return 0;
 }

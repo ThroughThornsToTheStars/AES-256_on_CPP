@@ -61,7 +61,7 @@ void EncryptDecryptFile(const std::string& inputFile, const std::string& outputF
 int main()
 {
     setlocale(LC_ALL, "RUS");
-    std::string inputFile = "input.txt";
+    std::string inputFile = "input.bin";
     std::string encryptedFile = "encrypted.bin";
     std::string decryptedFile = "decrypted.txt";
 
