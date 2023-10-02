@@ -45,7 +45,6 @@ string f(int d_code)
  
 int main()
 {
-    setlocale(LC_ALL, "Russian");
     string filePath;
     cout << "Enter the file path: ";
     cin >> filePath;
