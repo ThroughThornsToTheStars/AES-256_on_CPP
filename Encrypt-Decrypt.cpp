@@ -8,13 +8,19 @@ const int BLOCK_SIZE = 16; // размер блока для AES-256 (в бай�
 
 void AES_Encrypt(const std::vector<uint8_t>& input, const std::vector<uint8_t>& key, const std::vector<uint8_t>& iv, std::vector<uint8_t>& output)
 {
-
     for (size_t i = 0; i < input.size(); ++i) {
         output.push_back(input[i] ^ key[i % key.size()]);
     }
 }
 
-void EncryptFile(const std::string& inputFile, const std::string& outputFile)
+void AES_Decrypt(const std::vector<uint8_t>& input, const std::vector<uint8_t>& key, const std::vector<uint8_t>& iv, std::vector<uint8_t>& output)
+{
+    for (size_t i = 0; i < input.size(); ++i) {
+        output.push_back(input[i] ^ key[i % key.size()]);
+    }
+}
+
+void EncryptDecryptFile(const std::string& inputFile, const std::string& outputFile, bool encrypt)
 {
     std::ifstream ifs(inputFile, std::ios::binary);
     std::ofstream ofs(outputFile, std::ios::binary);
@@ -31,7 +37,12 @@ void EncryptFile(const std::string& inputFile, const std::string& outputFile)
     std::vector<uint8_t> outputBuffer;
 
     while (ifs.read(reinterpret_cast<char*>(inputBuffer.data()), BLOCK_SIZE)) {
-        AES_Encrypt(inputBuffer, key, iv, outputBuffer);
+        if (encrypt) {
+            AES_Encrypt(inputBuffer, key, iv, outputBuffer);
+        }
+        else {
+            AES_Decrypt(inputBuffer, key, iv, outputBuffer);
+        }
         ofs.write(reinterpret_cast<const char*>(outputBuffer.data()), outputBuffer.size());
         outputBuffer.clear();
     }
@@ -39,16 +50,26 @@ void EncryptFile(const std::string& inputFile, const std::string& outputFile)
     ifs.close();
     ofs.close();
 
-    std::cout << "Шифрование файла завершено!" << std::endl;
+    if (encrypt) {
+        std::cout << "Шифрование файла завершено!" << std::endl;
+    }
+    else {
+        std::cout << "Дешифрование файла завершено!" << std::endl;
+    }
 }
 
 int main()
 {
     setlocale(LC_ALL, "RUS");
     std::string inputFile = "input.txt";
-    std::string outputFile = "encrypted.bin";
+    std::string encryptedFile = "encrypted.bin";
+    std::string decryptedFile = "decrypted.txt";
 
-    EncryptFile(inputFile, outputFile);
+    // Шифрование файла
+    EncryptDecryptFile(inputFile, encryptedFile, true);
+
+    // Дешифрование файла
+    EncryptDecryptFile(encryptedFile, decryptedFile, false);
 
     return 0;
 }
