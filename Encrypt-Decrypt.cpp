@@ -70,3 +70,4 @@ int main()
     std::rename(decryptedFile.c_str(), renamedFile.c_str());
     return 0;
 }
+
