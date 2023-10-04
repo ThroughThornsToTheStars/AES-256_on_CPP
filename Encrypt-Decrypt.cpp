@@ -39,8 +39,7 @@ void EncryptDecryptFile(const std::string& inputFile, const std::string& outputF
     while (ifs.read(reinterpret_cast<char*>(inputBuffer.data()), BLOCK_SIZE)) {
         if (encrypt) {
             AES_Encrypt(inputBuffer, key, iv, outputBuffer);
-        }
-        else {
+        } else {
             AES_Decrypt(inputBuffer, key, iv, outputBuffer);
         }
         ofs.write(reinterpret_cast<const char*>(outputBuffer.data()), outputBuffer.size());
@@ -52,8 +51,7 @@ void EncryptDecryptFile(const std::string& inputFile, const std::string& outputF
 
     if (encrypt) {
         std::cout << "Шифрование файла завершено!" << std::endl;
-    }
-    else {
+    } else {
         std::cout << "Дешифрование файла завершено!" << std::endl;
     }
 }
@@ -61,15 +59,16 @@ void EncryptDecryptFile(const std::string& inputFile, const std::string& outputF
 int main()
 {
     setlocale(LC_ALL, "RUS");
-    std::string inputFile = "input.bin";
+    std::string inputFile = "input.txt";
     std::string encryptedFile = "encrypted.bin";
-    std::string decryptedFile = "decrypted.txt";
+    std::string decryptedFile = "decrypted.bin";
 
-    // Шифрование файла
     EncryptDecryptFile(inputFile, encryptedFile, true);
-
-    // Дешифрование файла
     EncryptDecryptFile(encryptedFile, decryptedFile, false);
 
+    size_t lastDotIndex = decryptedFile.find_last_of('.');
+    std::string renamedFile = decryptedFile.substr(0, lastDotIndex) + ".bin";
+    std::rename(decryptedFile.c_str(), renamedFile.c_str());
     return 0;
 }
+
