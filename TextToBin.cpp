@@ -45,15 +45,14 @@ string f(int d_code)
  
 int main()
 {
-    setlocale(LC_ALL, "Russian");
     string filePath;
-    cout << "¬ведите путь к файлу: ";
+    cout << "Enter the file path: ";
     cin >> filePath;
 
     ifstream fin(filePath, ios::binary);
     if (!fin)
     {
-        cout << "ќшибка при открытии файла!" << endl;
+        cout << "Error when opening the file!" << endl;
         return 1;
     }
 
@@ -65,5 +64,8 @@ int main()
         string binary_code = f((int)str[i]);
         MyFile.write(binary_code.c_str(), binary_code.size());
     }
+
+
+
     return 0;
 }
